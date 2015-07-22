@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style type="text/css">
+            #b1 {
+                position:absolute;
+            }
+           #b2 {
+                position:absolute;
+            }
+            img {
+                position: absolute;
+            }
+        </style>
+    </head>
+    <body>
+    	<button id="b1">Add x</button>
+        <button id="b2">Add Right</button>
+        <canvas id="c" width="800" height="800" style="border:1px solid #000000;"></canvas>
+    </body>
+	<script>
+		var b2 = document.getElementById("b2");
+		b2.style.top = "25px";
+		var pObjA = [];
+		var pProp = [];
+		var buildMatrix = [[]];
+		var D = 500;
+		var t = 0;
+		var PI = Math.PI;
+		var dTheta = PI/256;
+		var theta = 0;
+
+		var canvas = document.getElementById("c");
+     	context = canvas.getContext("2d");
+
+		function copy(arr)
+		{
+			return arr.concat([]);
+		}
+
+		function cuboidMaker(width,length,height)
+		{
+			var line1 = [{x:0,y:width,z:height},{x:0,y:0,z:height},{x:length,y:0,z:height},{x:length,y:width,z:height},{x:length,y:width,z:0},{x:0,y:width,z:0},{x:0,y:width,z:height},{x:length,y:width,z:height}]
+
+			var line2 = [{x:0,y:width,z:0},{x:0,y:0,z:0},{x:0,y:0,z:height}];
+			var line3 = [{x:0,y:0,z:0},{x:length,y:0,z:0},{x:length,y:0,z:height}]
+			var line4 = [{x:length,y:width,z:0},{x:length,y:0,z:0}]
+
+			return [line1,line2,line3,line4];
+		}
+
+		function combiner (object1,object2)
+		{
+			return object1.concat(object2);
+		}
+
+		function draw (pA)
+		{
+			context.clearRect(0, 0, canvas.width, canvas.height);
+			pA.forEach(function(pObject,l){
+
+				pObject.forEach(function(pLine,m){
+
+					for(var n = 0;n<pLine.length-1;n++)
+					{
+						var pPoint = pLine[n];
+						var pPoint1 =  pLine[n+1];
+						pPoint.z  = pPoint.z + 300;
+						pPoint1.z  = pPoint1.z + 300;
+						var gy = pPoint.y * D / (pPoint.x + D);
+						var gz = pPoint.z * D / (pPoint.x + D);
+						var g1y = pPoint1.y * D / (pPoint1.x + D);
+						var g1z = pPoint1.z * D / (pPoint1.x + D);
+						pPoint.z  = pPoint.z - 300;
+						pPoint1.z  = pPoint1.z - 300;
+						if (pPoint.x > - D)
+						{
+				            context.beginPath();
+				            context.moveTo(gy, gz);
+				            context.lineTo(g1y, g1z);
+				            context.lineWidth = .3;
+				            context.closePath();
+				            context.stroke();
+				        }
+					}
+				})
+			})
+		}
+
+		function transform(dis1,dis2,dis3,q,xA,yA,zA,XF,YF,ZF,Vx,Vy,Vz)
+		{
+			pProp.push({xA:xA,yA:yA,zA:zA,d1:dis1,d2:dis2,d3:dis3,xF:XF,yF:YF,zF:ZF,x:Vx,y:Vy,z:Vz});
+			createP(q,pProp)
+		}
+
+		function createP(q)
+		{
+			var p = [];
+			var l = pProp.length-1;
+
+			q.forEach(function(qSubA){
+				var pArray = [];
+				p.push(pArray);
+
+				qSubA.forEach(function(qPoint){
+					var prop = pProp[l];
+					pArray.push({x: qPoint.x + prop.d1, y: qPoint.y + prop.d2, z:qPoint.z + prop.d3});
+				})
+			})
+
+			pObjA.push(p);
+		}
+
+		function addCuber()
+		{
+			pObjA.push(cuboidMaker(400,500,50));
+
+			var lastEntry = pObjA.length -1;
+
+			pObjA[lastEntry].forEach(function(pLine,m){
+				if (lastEntry > 0)
+				{
+					for(var n = 0;n<pLine.length;n++)
+					{
+						var point = pLine[n];
+
+ 						point.x = point.x + pObjA[lastEntry - 1][0][7].x;
+						point.y = point.y;
+ 						point.z = point.z;
+					}
+				}
+			})
+
+			draw(pObjA);
+		}
+
+		function addCuberRight()
+		{
+			var width = 50;
+
+			pObjA.push(cuboidMaker(width,50,100));
+
+			var lastEntry = pObjA.length -1;
+
+			pObjA[lastEntry].forEach(function(pLine,m){
+				if (lastEntry > 0)
+				{
+					for(var n = 0;n<pLine.length;n++)
+					{
+						var point = pLine[n];
+						var lastLine = pObjA[lastEntry-1];
+ 						var thick = pObjA[lastEntry - 1][0][7].x - pObjA[lastEntry - 1][0][0].x;
+
+ 						point.x = point.x + lastLine[0][7].x - thick;
+						point.y = point.y + lastLine[0][7].y;
+ 						point.z = point.z ;
+					}
+				}
+			})
+
+			draw(pObjA);
+		}
+
+		b1.addEventListener('click', addCuber, false);
+		b2.addEventListener('click', addCuberRight, false);
+		//pObjA.push(cuboidMaker(400,50,50));
+		//draw(pObjA);
+	</script>
+</html>
+
