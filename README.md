@@ -1,1 +1,1 @@
-Build a castle with specifying with a number to produce that many vertical blocks in that location.
+A Javascript program that lets the user build a castle with specifying with a number to produce that many vertical blocks in that location. No imported libraries for 3d graphics, all is done using html canvas.
