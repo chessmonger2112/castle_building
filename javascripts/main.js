@@ -115,18 +115,17 @@ function createMatrix()
 {
   var numRows = mHeight;  // determines numbers of rows
   var numCols = mWidth; //number of collumns.
-  var tbody = $('<div>');
 
   for(var i = 0; i < numRows; i++)
   {
+    var tbody = $('<div>');
     for(var j = 0; j < numCols; j++)
     {
       var $input = $('<input type="number" data-i=' + i +' data-j=' + j +'> ');
       tbody.append($input);
     }
+    $('#wrapper').append(tbody);
   }
-  $('#wrapper').html(tbody);
-
 
   //event handler that is acted when user changes a number
   $('#wrapper input').keyup(function(){

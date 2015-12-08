@@ -3,9 +3,13 @@ canvas{
   z-index: -1;
   width: 100%;
   text-align: center;
-  height:530px;
+  height:510px;
 }
 #container{
+  width: 100%;
+  text-align: center;
+}
+#wrapper{
   width: 100%;
   text-align: center;
 }
