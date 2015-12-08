@@ -54,11 +54,13 @@ console.log("Viewer still tight bro!!");
   var containerW = Number(takeOutLastTwoLetters(containerW));
   var rotRightW = Number(takeOutLastTwoLetters(buttonRightRot));
   var rotLeftW = Number(takeOutLastTwoLetters(buttonLeftRot));
-
-  $("#container").css("left",-containerW / 2 + canvasW / 2 + "px");
-  $("#container").css("top",canvasH + 100);
-  $("#rotateRight").css("left",canvasW / 2 + 300 - rotRightW / 2 + "px");
-  $("#rotateLeft").css("left",canvasW / 2 - 300 - rotLeftW / 2 + "px");
+  var containerPos = 40;
+  var center = 645;
+  var spaceAway = 500;
+  $("#container").css("left",containerPos + "px");
+  $("#container").css("top",canvasH - 180);
+  $("#rotateRight").css("left",center + spaceAway + "px");
+  $("#rotateLeft").css("left",center - spaceAway  + "px");
   $(".rotate").css("top","650px");
 
 })();
