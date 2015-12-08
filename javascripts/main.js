@@ -12,25 +12,26 @@ for(var i = 0; i < mHeight; i++)
 
   for(var j = 0; j < mWidth; j++)
   {
-    buildingMatrix[i].push([]);
-    buildingMatrix[i][j] = 1;
+    buildingMatrix[i].push([1]);
   }
 }
 var D = 500;
-var source = {x:-D,y:-200,z:40};
+var source = {x:-D,y:-180,z:40};
 $("#target").keydown(function() {
   console.log("key is down");
-    D += 100;
+  D += 100;
+  draw(pObjA);
 });
 $("#target2").keydown(function() {
   console.log("key is down again!");
-    D -= 100;
+  D -= 100;
+  draw(pObjA);
 });
 
 var PI = Math.PI;
 
 var canvas = document.getElementById("c");
-context = canvas.getContext("2d");
+var context = canvas.getContext("2d");
 
 function matrixReader()
 {
@@ -49,9 +50,6 @@ function matrixReader()
 function builder(xInt,yInt,zInt)
 {
   var zDisplace = 500;
-//  pObjA.length = 0;
-
-{
   for(var i = 0; i < zInt; i++)
   {
     var width = 50;
@@ -60,7 +58,7 @@ function builder(xInt,yInt,zInt)
     var zLoopDisplace = -1 * (i + 1) * height;
     var yDisplaceTest = 200;
 
-    if ((xInt === 0) && (yInt != 0)) //front not left
+    if ((xInt === 0) && (yInt !== 0)) //front not left
     {
       if (i === zInt -1) //top block
       {
@@ -85,44 +83,41 @@ function builder(xInt,yInt,zInt)
       {
         pObjA.push(cuboidMaker(width,length,height));   //not top  block
       }
-
-      }
-      else if (yInt === 0 && (xInt!=0))
+    }
+    else if (yInt === 0 && (xInt!=0))
+    {
+      pObjA.push(leftMaker(width,length,height));//pObjA.push(leftMaker(width,length,height));  //left
+    }
+    else if((yInt === 0)&&(xInt === 0))
+    {
+      if (i === zInt -1) //top block
       {
-        pObjA.push(leftMaker(width,length,height));//pObjA.push(leftMaker(width,length,height));  //left
-      }
-      else if((yInt === 0)&&(xInt === 0))
-      {
-        if (i === zInt -1) //top block
-        {
-          pObjA.push(frontLeftTopMaker(width,length,height))
-        }
-        else
-        {
-          pObjA.push(frontLeftMaker(width,length,height))
-        }
+        pObjA.push(frontLeftTopMaker(width,length,height))
       }
       else
       {
-        pObjA.push(cuboidMaker(width,length,height));
+        pObjA.push(frontLeftMaker(width,length,height))
       }
-
-      var lastEntry = pObjA.length -1;
-
-      pObjA[lastEntry].forEach(function(pLine,m)
-      {
-        for(var n = 0;n < pLine.length;n++)
-        {
-          var xDisplace = length * xInt + 0;
-          var yDisplace = width * yInt;
-          var point = pLine[n];
-
-          point.x += xDisplace;
-          point.y += yDisplace + yDisplaceTest;
-          point.z += zDisplace + zLoopDisplace;
-        }
-      })
     }
+    else
+    {
+      pObjA.push(cuboidMaker(width,length,height));
+    }
+
+    var lastEntry = pObjA.length -1;
+    pObjA[lastEntry].forEach(function(pLine,m)
+    {
+      for(var n = 0;n < pLine.length;n++)
+      {
+        var xDisplace = length * xInt + 0;
+        var yDisplace = width * yInt;
+        var point = pLine[n];
+
+        point.x += xDisplace;
+        point.y += yDisplace + yDisplaceTest;
+        point.z += zDisplace + zLoopDisplace;
+      }
+    });
   }
 }
 
@@ -136,12 +131,15 @@ function createMatrix()
   {
     for(var j = 0; j < numCols; j++)
     {
-      var $input = $('<input type="number" data-i=' + i +' data-j=' + j +'> ' );
+      var $input = $('<input type="number" data-i=' + i +' data-j=' + j +'> ');
       tbody.append($input);
     }
   }
-  $('#wrapper2').html(tbody);
-  $('#wrapper2 input').keyup(function(){
+  $('#wrapper').html(tbody);
+
+
+  //event handler that is acted when user changes a number
+  $('#wrapper input').keyup(function(){
 
     var i = $(this).data('i');
     var j = $(this).data('j');
@@ -154,9 +152,7 @@ function createMatrix()
 
 function cuboidMaker(width,length,height)
 {
-
   var face1 = [{x:0,y:0,z:0},{x:0,y:width,z:0},{x:0,y:width,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
-
   var face2 = [{x:0,y:width,z:0},{x:length,y:width,z:0},{x:length,y:width,z:height},{x:0,y:width,z:height},{x:0,y:width,z:0}];
   var face3 = [{x:length,y:0,z:0},{x:length,y:width,z:0},{x:length,y:width,z:height},{x:length,y:0,z:height},{x:length,y:0,z:0}];
   var face4 = [{x:length,y:0,z:0},{x:length,y:width,z:0},{x:0,y:width,z:0},{x:0,y:0,z:0},{x:length,y:0,z:0}];
@@ -165,21 +161,18 @@ function cuboidMaker(width,length,height)
 
   //return[face1,face2,face3,face4,face5,face6];
   return [face1];
-
 }
 
 function leftMaker(width,length,height)
 {
-    var face1 = [{x:0,y:0,z:0},{x:length,y:0,z:0},{x:length,y:0,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
+  var face1 = [{x:0,y:0,z:0},{x:length,y:0,z:0},{x:length,y:0,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
   return [face1];
-
 }
 
 function frontLeftMaker(width,length,height)
 {
-    var face1 = [{x:0,y:0,z:0},{x:length,y:0,z:0},{x:length,y:0,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
-    var face2 = [{x:0,y:0,z:0},{x:0,y:width,z:0},{x:0,y:width,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
-
+  var face1 = [{x:0,y:0,z:0},{x:length,y:0,z:0},{x:length,y:0,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
+  var face2 = [{x:0,y:0,z:0},{x:0,y:width,z:0},{x:0,y:width,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
   return [face1,face2];
 }
 
@@ -202,11 +195,11 @@ function combiner (object1,object2)
 {
   return object1.concat(object2);
 }
+  displacer(pObjA,500,0,0);
 
 function draw (pA)
 {
   context.clearRect(0, 0, canvas.width, canvas.height);
-  displacer(pA,500,0,0);
 
   pA.forEach(function(pObject,l){
     pObject.forEach(function(pLine,m){
@@ -238,17 +231,18 @@ function displacer (qObjA,d1,d2,d3)
     {
       qLine.forEach(function(qPoint)
       {
-        qPoint.x = qPoint.x + d1;
-        qPoint.y = qPoint.y + d2;
-        qPoint.z = qPoint.z + d3;
+        qPoint.x += d1;
+        qPoint.y += d2;
+        qPoint.z += d3;
       });
     });
   });
+
   console.log("get displaced");
   return qObjA;
 }
 
 createMatrix();
 matrixReader();
-draw(displacer(pObjA,0,440,400));
+draw(pObjA);
 console.log("Blocks used: ",usedBlocks," Blocks left: ",blocksLeft);
