@@ -22,285 +22,233 @@ $("#target").keydown(function() {
   console.log("key is down");
     D += 100;
 });
-
 $("#target2").keydown(function() {
   console.log("key is down again!");
     D -= 100;
 });
 
-    var PI = Math.PI;
+var PI = Math.PI;
 
-    var canvas = document.getElementById("c");
-      context = canvas.getContext("2d");
+var canvas = document.getElementById("c");
+context = canvas.getContext("2d");
 
-      function matrixReader()
-      {
-        pObjA.length = 0;
-        buildingMatrix.forEach(function(nextMatrix,m)
-        {
-          nextMatrix.forEach(function(value,n)
-          {
-            builder(m,n,nextMatrix[n])
-            usedBlocks += nextMatrix[n];
-            blocksLeft = initialBlock - usedBlocks;
-          })
-        })
-      }
-
-      function builder(xInt,yInt,zInt)
+function matrixReader()
+{
+  pObjA.length = 0;
+  buildingMatrix.forEach(function(nextMatrix,m)
+  {
+    nextMatrix.forEach(function(value,n)
     {
-      var zDisplace = 500;
-    //  pObjA.length = 0;
+      builder(m,n,nextMatrix[n])
+      usedBlocks += nextMatrix[n];
+      blocksLeft = initialBlock - usedBlocks;
+    });
+  });
+}
 
+function builder(xInt,yInt,zInt)
+{
+  var zDisplace = 500;
+//  pObjA.length = 0;
+
+{
+  for(var i = 0; i < zInt; i++)
+  {
+    var width = 50;
+    var length = 20;
+    var height = 50;
+    var zLoopDisplace = -1 * (i + 1) * height;
+    var yDisplaceTest = 200;
+
+    if ((xInt === 0) && (yInt != 0)) //front not left
+    {
+      if (i === zInt -1) //top block
       {
-        for(var i = 0; i < zInt; i++)
+        if (yInt === 0)
         {
-          var width = 50;
-          var length = 20;
-          var height = 50;
-          var zLoopDisplace = -1 * (i + 1) * height;
-          var yDisplaceTest = 200;
-
-
-        if ((xInt === 0) && (yInt != 0)) //front not left
-        {
-          if (i === zInt -1) //top block
-          {
-            if (yInt === 0)
-            {
-                pObjA.push(frontLeftTopMaker(width,length,height))  //Top left
-            }
-            else if (i + 1 === buildingMatrix[xInt][yInt-1])
-            {
-              pObjA.push(frontTopMaker(width,length,height)) // Top, but not most left. Checking if right is same height.
-            }
-            else if(i + 1 > buildingMatrix[xInt][yInt-1])
-            {
-              pObjA.push(frontLeftTopMaker(width,length,height))  //Different heights than the block to the right
-            }
-            else
-            {
-              pObjA.push(leftMaker(width,length,height))
-            }
-          }
-          else
-          {
-            pObjA.push(cuboidMaker(width,length,height));   //not top  block
-          }
-
+            pObjA.push(frontLeftTopMaker(width,length,height))  //Top left
         }
-        else if (yInt === 0 && (xInt!=0))
+        else if (i + 1 === buildingMatrix[xInt][yInt-1])
         {
-          pObjA.push(leftMaker(width,length,height));//pObjA.push(leftMaker(width,length,height));  //left
+          pObjA.push(frontTopMaker(width,length,height)) // Top, but not most left. Checking if right is same height.
         }
-        else if((yInt === 0)&&(xInt === 0))
+        else if(i + 1 > buildingMatrix[xInt][yInt-1])
         {
-          if (i === zInt -1) //top block
-          {
-            pObjA.push(frontLeftTopMaker(width,length,height))
-          }
-          else
-          {
-            pObjA.push(frontLeftMaker(width,length,height))
-          }
+          pObjA.push(frontLeftTopMaker(width,length,height))  //Different heights than the block to the right
         }
         else
         {
-          pObjA.push(cuboidMaker(width,length,height));
-        }
-
-          var lastEntry = pObjA.length -1;
-
-          pObjA[lastEntry].forEach(function(pLine,m)
-          {
-            for(var n = 0;n < pLine.length;n++)
-            {
-              var xDisplace = length * xInt + 0;
-              var yDisplace = width * yInt;
-              var point = pLine[n];
-
-              point.x += xDisplace;
-              point.y += yDisplace + yDisplaceTest;
-              point.z += zDisplace + zLoopDisplace;
-            }
-          })
+          pObjA.push(leftMaker(width,length,height))
         }
       }
-    }
-
-    function createMatrix()
-    {
-        var numRows = mHeight;  // determines numbers of rows
-        var numCols = mWidth; //number of collumns.
-
-        var tbody = $('<div>');
-
-        for(var i = 0; i < numRows; i++)
-        {
-            for(var j = 0; j < numCols; j++)
-            {
-              var $input = $('<input type="number" data-i=' + i +' data-j=' + j +'> ' );
-
-              tbody.append($input);
-              }
-      }
-      $('#wrapper2').html(tbody);
-      $('#wrapper2 input').keyup(function(){
-
-          var i = $(this).data('i');
-          var j = $(this).data('j');
-
-          buildingMatrix[i][j] = parseInt($(this).val());
-          matrixReader();
-          draw(pObjA);
-        });
-    }
-
-    function cuboidMaker(width,length,height)
-    {
-
-      var face1 = [{x:0,y:0,z:0},{x:0,y:width,z:0},{x:0,y:width,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
-
-      var face2 = [{x:0,y:width,z:0},{x:length,y:width,z:0},{x:length,y:width,z:height},{x:0,y:width,z:height},{x:0,y:width,z:0}];
-      var face3 = [{x:length,y:0,z:0},{x:length,y:width,z:0},{x:length,y:width,z:height},{x:length,y:0,z:height},{x:length,y:0,z:0}];
-      var face4 = [{x:length,y:0,z:0},{x:length,y:width,z:0},{x:0,y:width,z:0},{x:0,y:0,z:0},{x:length,y:0,z:0}];
-      var face5 = [{x:length,y:0,z:height},{x:length,y:width,z:height},{x:0,y:width,z:height},{x:0,y:0,z:height},{x:length,y:0,z:height}];
-      var face6 = [{x:0,y:0,z:0},{x:length,y:0,z:0},{x:length,y:0,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
-
-      //return[face1,face2,face3,face4,face5,face6];
-      return [face1];
-
-    }
-
-    function leftMaker(width,length,height)
-    {
-        var face1 = [{x:0,y:0,z:0},{x:length,y:0,z:0},{x:length,y:0,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
-      return [face1];
-
-    }
-
-    function frontLeftMaker(width,length,height)
-    {
-        var face1 = [{x:0,y:0,z:0},{x:length,y:0,z:0},{x:length,y:0,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
-        var face2 = [{x:0,y:0,z:0},{x:0,y:width,z:0},{x:0,y:width,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
-
-      return [face1,face2];
-    }
-
-    function frontLeftTopMaker(width,length,height)
-    {
-        var face1 = [{x:0,y:0,z:0},{x:length,y:0,z:0},{x:length,y:0,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
-        var face2 = [{x:0,y:0,z:0},{x:0,y:width,z:0},{x:0,y:width,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
-      var face3 = [{x:length,y:0,z:0},{x:length,y:width,z:0},{x:0,y:width,z:0}];
-
-      return [face1,face2,face3];
-    }
-
-    function frontTopMaker(width,length,height)
-    {
-      var face1 = [{x:0,y:0,z:0},{x:0,y:width,z:0},{x:0,y:width,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
-      var face2 = [{x:length,y:0,z:0},{x:length,y:width,z:0},{x:0,y:width,z:0}];
-      return [face1,face2];
-    }
-
-    function combiner (object1,object2)
-    {
-      return object1.concat(object2);
-    }
-
-      function a(num)
+      else
       {
-        return Math.abs(num)
+        pObjA.push(cuboidMaker(width,length,height));   //not top  block
       }
 
-    function draw (pA)
-    {
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      displacer(pA,500,0,0);
-
-      pA.forEach(function(pObject,l){
-
-        pObject.forEach(function(pLine,m){
-
-          for(var n = 0;n<pLine.length-1;n++)
-          {
-            var pPoint = pLine[n];
-            var pPoint1 =  pLine[n + 1];
-
-            var gy = (pPoint.y - source.y) * D / (pPoint.x + D);
-            var gz = (pPoint.z - source.z) * D / (pPoint.x + D);
-            var g1y = (pPoint1.y - source.y) * D / (pPoint1.x + D);
-            var g1z = (pPoint1.z - source.z) * D / (pPoint1.x + D);
-
-            //if (pPoint.x > - D)
-            {
-              /*
-              var intLine = getLine(pPoint.x,pPoint.y,pPoint.z);
-                    pA.forEach(function(pObject,l){
-
-                      pObject.forEach(function(area,m){
-                        var plane = getPlane(area[0],area[1],area[2]);
-                        var intPoint = planeLineIntersect(intLine,plane);
-
-                        var bool = visibility(intPoint,plane);
-                      })
-                    })
-*/
-
-                      context.beginPath();
-                      context.moveTo(gy, gz);
-                      context.lineTo(g1y, g1z);
-                      context.lineWidth = .3;
-                      context.closePath();
-                      context.stroke();
-                }
-          }
-        })
-      })
-    }
-    function displacer (qObjA,d1,d2,d3)
-    {
-      qObjA.forEach(function(qObject)
+      }
+      else if (yInt === 0 && (xInt!=0))
       {
-        qObject.forEach(function(qLine)
+        pObjA.push(leftMaker(width,length,height));//pObjA.push(leftMaker(width,length,height));  //left
+      }
+      else if((yInt === 0)&&(xInt === 0))
+      {
+        if (i === zInt -1) //top block
         {
-          qLine.forEach(function(qPoint)
-          {
-            qPoint.x = qPoint.x + d1;
-            qPoint.y = qPoint.y + d2;
-            qPoint.z = qPoint.z + d3;
-          })
-        })
+          pObjA.push(frontLeftTopMaker(width,length,height))
+        }
+        else
+        {
+          pObjA.push(frontLeftMaker(width,length,height))
+        }
+      }
+      else
+      {
+        pObjA.push(cuboidMaker(width,length,height));
+      }
+
+      var lastEntry = pObjA.length -1;
+
+      pObjA[lastEntry].forEach(function(pLine,m)
+      {
+        for(var n = 0;n < pLine.length;n++)
+        {
+          var xDisplace = length * xInt + 0;
+          var yDisplace = width * yInt;
+          var point = pLine[n];
+
+          point.x += xDisplace;
+          point.y += yDisplace + yDisplaceTest;
+          point.z += zDisplace + zLoopDisplace;
+        }
       })
-      console.log("get displaced");
-
-      return qObjA;
     }
+  }
+}
 
-    createMatrix();
+function createMatrix()
+{
+  var numRows = mHeight;  // determines numbers of rows
+  var numCols = mWidth; //number of collumns.
+  var tbody = $('<div>');
+
+  for(var i = 0; i < numRows; i++)
+  {
+    for(var j = 0; j < numCols; j++)
+    {
+      var $input = $('<input type="number" data-i=' + i +' data-j=' + j +'> ' );
+      tbody.append($input);
+    }
+  }
+  $('#wrapper2').html(tbody);
+  $('#wrapper2 input').keyup(function(){
+
+    var i = $(this).data('i');
+    var j = $(this).data('j');
+
+    buildingMatrix[i][j] = parseInt($(this).val());
     matrixReader();
-    draw(displacer(pObjA,0,440,400));
+    draw(pObjA);
+  });
+}
 
-    var arr1 = [1,2,3]
-    var arr2 = [4,5,6]
-    var arr3 = [7,8,9]
-    var arr4 = [10,11,12];
+function cuboidMaker(width,length,height)
+{
 
-    var array1 = [arr1,arr2,arr3,arr4]
-    var array2 = [];
+  var face1 = [{x:0,y:0,z:0},{x:0,y:width,z:0},{x:0,y:width,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
 
-    array1.forEach(function(val,n){
-      //console.log("sdfsd")
-    array2[n] = val;
+  var face2 = [{x:0,y:width,z:0},{x:length,y:width,z:0},{x:length,y:width,z:height},{x:0,y:width,z:height},{x:0,y:width,z:0}];
+  var face3 = [{x:length,y:0,z:0},{x:length,y:width,z:0},{x:length,y:width,z:height},{x:length,y:0,z:height},{x:length,y:0,z:0}];
+  var face4 = [{x:length,y:0,z:0},{x:length,y:width,z:0},{x:0,y:width,z:0},{x:0,y:0,z:0},{x:length,y:0,z:0}];
+  var face5 = [{x:length,y:0,z:height},{x:length,y:width,z:height},{x:0,y:width,z:height},{x:0,y:0,z:height},{x:length,y:0,z:height}];
+  var face6 = [{x:0,y:0,z:0},{x:length,y:0,z:0},{x:length,y:0,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
 
-    })
+  //return[face1,face2,face3,face4,face5,face6];
+  return [face1];
 
+}
 
-    array2[0][0] = [69,45];
-    //console.log(array1,array2);
+function leftMaker(width,length,height)
+{
+    var face1 = [{x:0,y:0,z:0},{x:length,y:0,z:0},{x:length,y:0,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
+  return [face1];
 
-      console.log("Blocks used: ",usedBlocks," Blocks left: ",blocksLeft);
+}
 
+function frontLeftMaker(width,length,height)
+{
+    var face1 = [{x:0,y:0,z:0},{x:length,y:0,z:0},{x:length,y:0,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
+    var face2 = [{x:0,y:0,z:0},{x:0,y:width,z:0},{x:0,y:width,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
 
+  return [face1,face2];
+}
 
-    //b1.addEventListener('click', addCuber, false);
+function frontLeftTopMaker(width,length,height)
+{
+  var face1 = [{x:0,y:0,z:0},{x:length,y:0,z:0},{x:length,y:0,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
+  var face2 = [{x:0,y:0,z:0},{x:0,y:width,z:0},{x:0,y:width,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
+  var face3 = [{x:length,y:0,z:0},{x:length,y:width,z:0},{x:0,y:width,z:0}];
+  return [face1,face2,face3];
+}
+
+function frontTopMaker(width,length,height)
+{
+  var face1 = [{x:0,y:0,z:0},{x:0,y:width,z:0},{x:0,y:width,z:height},{x:0,y:0,z:height},{x:0,y:0,z:0}];
+  var face2 = [{x:length,y:0,z:0},{x:length,y:width,z:0},{x:0,y:width,z:0}];
+  return [face1,face2];
+}
+
+function combiner (object1,object2)
+{
+  return object1.concat(object2);
+}
+
+function draw (pA)
+{
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  displacer(pA,500,0,0);
+
+  pA.forEach(function(pObject,l){
+    pObject.forEach(function(pLine,m){
+      for(var n = 0;n<pLine.length-1;n++)
+      {
+        var pPoint = pLine[n];
+        var pPoint1 =  pLine[n + 1];
+
+        var gy = (pPoint.y - source.y) * D / (pPoint.x + D);
+        var gz = (pPoint.z - source.z) * D / (pPoint.x + D);
+        var g1y = (pPoint1.y - source.y) * D / (pPoint1.x + D);
+        var g1z = (pPoint1.z - source.z) * D / (pPoint1.x + D);
+
+        context.beginPath();
+        context.moveTo(gy, gz);
+        context.lineTo(g1y, g1z);
+        context.lineWidth = .3;
+        context.closePath();
+        context.stroke();
+      }
+    });
+  });
+}
+function displacer (qObjA,d1,d2,d3)
+{
+  qObjA.forEach(function(qObject)
+  {
+    qObject.forEach(function(qLine)
+    {
+      qLine.forEach(function(qPoint)
+      {
+        qPoint.x = qPoint.x + d1;
+        qPoint.y = qPoint.y + d2;
+        qPoint.z = qPoint.z + d3;
+      });
+    });
+  });
+  console.log("get displaced");
+  return qObjA;
+}
+
+createMatrix();
+matrixReader();
+draw(displacer(pObjA,0,440,400));
+console.log("Blocks used: ",usedBlocks," Blocks left: ",blocksLeft);
