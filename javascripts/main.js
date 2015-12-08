@@ -16,7 +16,7 @@ for(var i = 0; i < mHeight; i++)
   }
 }
 var D = 500;
-var source = {x:-D,y:-180,z:40};
+var origin = {x:0,y:-180,z:40};
 $("#target").keydown(function() {
   console.log("key is down");
   D += 100;
@@ -208,10 +208,10 @@ function draw (pA)
         var pPoint = pLine[n];
         var pPoint1 =  pLine[n + 1];
 
-        var gy = (pPoint.y - source.y) * D / (pPoint.x + D);
-        var gz = (pPoint.z - source.z) * D / (pPoint.x + D);
-        var g1y = (pPoint1.y - source.y) * D / (pPoint1.x + D);
-        var g1z = (pPoint1.z - source.z) * D / (pPoint1.x + D);
+        var gy = (pPoint.y - origin.y) * D / (pPoint.x - origin.x + D);
+        var gz = (pPoint.z - origin.z) * D / (pPoint.x - origin.x + D);
+        var g1y = (pPoint1.y - origin.y) * D / (pPoint1.x - origin.x + D);
+        var g1z = (pPoint1.z - origin.z) * D / (pPoint1.x - origin.x + D);
 
         context.beginPath();
         context.moveTo(gy, gz);
