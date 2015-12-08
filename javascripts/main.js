@@ -17,6 +17,8 @@ for(var i = 0; i < mHeight; i++)
 }
 var D = 500;
 var origin = {x:0,y:-180,z:40};
+var axisRot = {x:0,y:0,z:0}
+var thetaView = 0;
 
 var PI = Math.PI;
 
@@ -196,10 +198,48 @@ function draw (pA)
         var pPoint = pLine[n];
         var pPoint1 =  pLine[n + 1];
 
-        var gy = (pPoint.y - origin.y) * D / (pPoint.x - origin.x + D);
-        var gz = (pPoint.z - origin.z) * D / (pPoint.x - origin.x + D);
-        var g1y = (pPoint1.y - origin.y) * D / (pPoint1.x - origin.x + D);
-        var g1z = (pPoint1.z - origin.z) * D / (pPoint1.x - origin.x + D);
+        // var x3d1 = pPoint.x;
+        // var y3d1 = pPoint.y;
+        // var z3d1 = pPoint.z;
+
+        // var x3d2 = pPoint1.x;
+        // var y3d2 = pPoint1.y;
+        // var z3d2 = pPoint1.z;
+
+        var x3d = pPoint.x;
+        var y3d = pPoint.y;
+        var z3d = pPoint.z;
+
+        var x3d0 = pPoint1.x;
+        var y3d0 = pPoint1.y;
+        var z3d0 = pPoint1.z;
+
+
+
+
+
+        var x3d1 = ((x3d - axisRot.x) * Math.cos(thetaView) - (y3d - axisRot.y) * Math.sin(thetaView)) + axisRot.x;
+        var y3d1 = ((y3d - axisRot.y) * Math.cos(thetaView) + (x3d - axisRot.x) * Math.sin(thetaView)) + axisRot.y;
+
+        var x3d2 = ((x3d0 - axisRot.x) * Math.cos(thetaView) - (y3d0 - axisRot.y) * Math.sin(thetaView)) + axisRot.x;
+        var y3d2 = ((y3d0 - axisRot.y) * Math.cos(thetaView) + (x3d0 - axisRot.x) * Math.sin(thetaView)) + axisRot.y;
+
+
+
+        var gy = (y3d1 - origin.y) * D / (x3d1 - origin.x + D);
+        var gz = (z3d - origin.z) * D / (x3d1 - origin.x + D);
+        var g1y = (y3d2 - origin.y) * D / (x3d2 - origin.x + D);
+        var g1z = (z3d0 - origin.z) * D / (x3d2 - origin.x + D);
+
+
+
+
+
+
+
+
+
+
 
         context.beginPath();
         context.moveTo(gy, gz);

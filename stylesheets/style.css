@@ -5,6 +5,9 @@ canvas{
   text-align: center;
   height:510px;
 }
+div{
+  z-index: -1
+}
 #container{
   width: 100%;
   text-align: center;
