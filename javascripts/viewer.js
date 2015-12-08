@@ -1,8 +1,4 @@
-// var origin = {x:0,y:0,z:0};
-// // origin.z = -380;
-// origin.x = 240;
-// origin.y = 50;
-// origin.z = -80;
+
 console.log("Viewer is our new glib glob!!!!!");
 $("#michaelBay").click(function(){
   michaelBay = !michaelBay;
@@ -30,6 +26,10 @@ $("#zoomIn").click(function() {
 });
 $("#zoomOut").click(function() {
   origin.x += -13;
+});
+$("button").click(function() {
+  console.log("tighhhht");
+  draw(pObjA);
 });
 console.log("Viewer still tight bro!!");
 (function()

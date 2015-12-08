@@ -17,16 +17,6 @@ for(var i = 0; i < mHeight; i++)
 }
 var D = 500;
 var origin = {x:0,y:-180,z:40};
-$("#target").keydown(function() {
-  console.log("key is down");
-  D += 100;
-  draw(pObjA);
-});
-$("#target2").keydown(function() {
-  console.log("key is down again!");
-  D -= 100;
-  draw(pObjA);
-});
 
 var PI = Math.PI;
 
@@ -195,7 +185,6 @@ function combiner (object1,object2)
 {
   return object1.concat(object2);
 }
-  displacer(pObjA,500,0,0);
 
 function draw (pA)
 {
