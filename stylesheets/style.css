@@ -1,0 +1,35 @@
+canvas{
+  left: 0px;
+  z-index: -1;
+  width: 100%;
+  text-align: center;
+  height:530px;
+}
+#container{
+  width: 100%;
+  text-align: center;
+}
+button {
+  border: 0px;
+}
+#moveDown{
+  cursor:s-resize;
+}
+#moveUp{
+  cursor:n-resize;
+}
+#moveLeft{
+  cursor:w-resize;
+}
+#moveRight{
+  cursor:e-resize;
+}
+#zoomIn{
+  cursor: zoom-in
+}
+#zoomOut{
+  cursor: zoom-out
+}
+.absolute{
+  position: absolute;
+}

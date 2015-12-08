@@ -1,32 +1,31 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <style type="text/css">
-            #b1 {
-                position:absolute;
-            }
-           #b2 {
-                position:absolute;
-            }
-
-            img {
-                position: absolute;
-            }
-
-        </style>
-
-        <input id="target" type="text" value="Forward">
-        <input id="target2" type="text" value="Back">
+  <head>
+    <link rel="stylesheet" href="stylesheets/style.css">
+  </head>
+  <body>
+    <input id="target" type="text" value="Forward">
+    <input id="target2" type="text" value="Back">
 
 		<div id= "wrapper"></div>
 		<div id= "wrapper2"></div>
-
-    </head>
-
-    <body>
-        <canvas id="c" width="800" height="800" style="border:1px solid #000000;"></canvas>
-       	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script src="main.js"></script>
-    </body>
+    <canvas id="c" width="800" height="800" style="border:1px solid #000000;"></canvas>
+    <button id="rotateLeft" class="absolute rotate">Rotate Left</button>
+    <span>
+      <div id="container" class="absolute">
+        <div><button id="zoomIn">Zoom In</button></div>
+        <div><button id="moveUp">Move screen up</button></div>
+        <div>
+          <button id="moveLeft">Move screen left</button>
+          <button id="moveRight">Move screen right</button>
+        </div>
+        <div><button id="moveDown">Move screen down</button></div>
+        <div><button id="zoomOut">Zoom Out</button></div>
+      </div>
+    </span>
+    <button id="rotateRight" class="absolute rotate">Rotate right</button>
+   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <script src="javascripts/viewer.js"></script>
+  </body>
 </html>
-

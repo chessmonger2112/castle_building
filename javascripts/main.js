@@ -1,35 +1,32 @@
 var usedBlocks = 0;
-    var initialBlock = 100;
-    var blocksLeft = null;;
-    var pObjA = [];
+var initialBlock = 100;
+var blocksLeft = null;;
+var pObjA = [];
+var buildingMatrix = [];
+var mHeight = 5; //rows
+var mWidth = 3;  //collumns
 
-    var buildingMatrix = [];
-    var mHeight = 5; //rows
-    var mWidth = 3;  //collumns
+for(var i = 0; i < mHeight; i++)
+{
+  buildingMatrix.push([]);
 
-    for(var i = 0; i < mHeight; i++)
-    {
-      buildingMatrix.push([]);
+  for(var j = 0; j < mWidth; j++)
+  {
+    buildingMatrix[i].push([]);
+    buildingMatrix[i][j] = 1;
+  }
+}
+var D = 500;
+var source = {x:-D,y:-200,z:40};
+$("#target").keydown(function() {
+  console.log("key is down");
+    D += 100;
+});
 
-      for(var j = 0; j < mWidth; j++)
-      {
-        buildingMatrix[i].push([]);
-        buildingMatrix[i][j] = 1;
-      }
-    }
-    var D = 500;
-    var source = {x:-D,y:-200,z:40};
-
-
-    $( "#target" ).keydown(function() {
-      console.log("key is down");
-        D += 100;
-    });
-
-    $( "#target2" ).keydown(function() {
-      console.log("key is down again!");
-        D -= 100;
-    });
+$("#target2").keydown(function() {
+  console.log("key is down again!");
+    D -= 100;
+});
 
     var PI = Math.PI;
 
