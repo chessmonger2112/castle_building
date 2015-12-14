@@ -3,25 +3,32 @@ var initialBlock = 100;
 var blocksLeft = null;;
 var pObjA = [];
 var buildingMatrix = [];
-var mHeight = 5; //rows
+var mDepth = 5; //rows
 var mWidth = 3;  //collumns
+var width = 50;
+var length = 20;
+var height = 50;
+var leftest = 0;
+var rightest = mWidth * width;
+var avgY = (leftest + rightest) / 2;
+var frontest = 0;
+var depthest = mDepth * length;
+var avgZ = (frontest + depthest) / 2;
 
-for(var i = 0; i < mHeight; i++)
+for(var i = 0; i < mDepth; i++)
 {
   buildingMatrix.push([]);
 
   for(var j = 0; j < mWidth; j++)
   {
-    buildingMatrix[i].push([1]);
+    buildingMatrix[i].push(1);
   }
 }
 var D = 500;
-var origin = {x:0,y:-180,z:40};
-var axisRot = {x:0,y:0,z:0}
+var origin = {x:0,y:-360,z:40};
+var axisRot = {x:avgZ,y:avgY,z:0};
 var thetaView = 0;
-
 var PI = Math.PI;
-
 var canvas = document.getElementById("c");
 var context = canvas.getContext("2d");
 
@@ -40,15 +47,11 @@ function matrixReader()
 }
 
 function builder(xInt,yInt,zInt)
-{
+{ //this is called for x,y square
   var zDisplace = 500;
   for(var i = 0; i < zInt; i++)
-  {
-    var width = 50;
-    var length = 20;
-    var height = 50;
+  { //goes for how many vertical squares in this x,y square
     var zLoopDisplace = -1 * (i + 1) * height;
-    var yDisplaceTest = 200;
 
     if ((xInt === 0) && (yInt !== 0)) //front not left
     {
@@ -56,19 +59,19 @@ function builder(xInt,yInt,zInt)
       {
         if (yInt === 0)
         {
-            pObjA.push(frontLeftTopMaker(width,length,height))  //Top left
+            pObjA.push(frontLeftTopMaker(width,length,height));  //Top left
         }
         else if (i + 1 === buildingMatrix[xInt][yInt-1])
         {
-          pObjA.push(frontTopMaker(width,length,height)) // Top, but not most left. Checking if right is same height.
+          pObjA.push(frontTopMaker(width,length,height)); // Top, but not most left. Checking if right is same height.
         }
         else if(i + 1 > buildingMatrix[xInt][yInt-1])
         {
-          pObjA.push(frontLeftTopMaker(width,length,height))  //Different heights than the block to the right
+          pObjA.push(frontLeftTopMaker(width,length,height));  //Different heights than the block to the right
         }
         else
         {
-          pObjA.push(leftMaker(width,length,height))
+          pObjA.push(leftMaker(width,length,height));
         }
       }
       else
@@ -84,11 +87,11 @@ function builder(xInt,yInt,zInt)
     {
       if (i === zInt -1) //top block
       {
-        pObjA.push(frontLeftTopMaker(width,length,height))
+        pObjA.push(frontLeftTopMaker(width,length,height));
       }
       else
       {
-        pObjA.push(frontLeftMaker(width,length,height))
+        pObjA.push(frontLeftMaker(width,length,height));
       }
     }
     else
@@ -106,7 +109,7 @@ function builder(xInt,yInt,zInt)
         var point = pLine[n];
 
         point.x += xDisplace;
-        point.y += yDisplace + yDisplaceTest;
+        point.y += yDisplace;
         point.z += zDisplace + zLoopDisplace;
       }
     });
@@ -115,7 +118,7 @@ function builder(xInt,yInt,zInt)
 
 function createMatrix()
 {
-  var numRows = mHeight;  // determines numbers of rows
+  var numRows = mDepth;  // determines numbers of rows
   var numCols = mWidth; //number of collumns.
 
   for(var i = 0; i < numRows; i++)
@@ -198,14 +201,6 @@ function draw (pA)
         var pPoint = pLine[n];
         var pPoint1 =  pLine[n + 1];
 
-        // var x3d1 = pPoint.x;
-        // var y3d1 = pPoint.y;
-        // var z3d1 = pPoint.z;
-
-        // var x3d2 = pPoint1.x;
-        // var y3d2 = pPoint1.y;
-        // var z3d2 = pPoint1.z;
-
         var x3d = pPoint.x;
         var y3d = pPoint.y;
         var z3d = pPoint.z;
@@ -214,32 +209,15 @@ function draw (pA)
         var y3d0 = pPoint1.y;
         var z3d0 = pPoint1.z;
 
-
-
-
-
         var x3d1 = ((x3d - axisRot.x) * Math.cos(thetaView) - (y3d - axisRot.y) * Math.sin(thetaView)) + axisRot.x;
         var y3d1 = ((y3d - axisRot.y) * Math.cos(thetaView) + (x3d - axisRot.x) * Math.sin(thetaView)) + axisRot.y;
 
         var x3d2 = ((x3d0 - axisRot.x) * Math.cos(thetaView) - (y3d0 - axisRot.y) * Math.sin(thetaView)) + axisRot.x;
         var y3d2 = ((y3d0 - axisRot.y) * Math.cos(thetaView) + (x3d0 - axisRot.x) * Math.sin(thetaView)) + axisRot.y;
-
-
-
         var gy = (y3d1 - origin.y) * D / (x3d1 - origin.x + D);
         var gz = (z3d - origin.z) * D / (x3d1 - origin.x + D);
         var g1y = (y3d2 - origin.y) * D / (x3d2 - origin.x + D);
         var g1z = (z3d0 - origin.z) * D / (x3d2 - origin.x + D);
-
-
-
-
-
-
-
-
-
-
 
         context.beginPath();
         context.moveTo(gy, gz);

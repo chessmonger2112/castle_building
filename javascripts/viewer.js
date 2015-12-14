@@ -1,5 +1,3 @@
-
-console.log("Viewer is our new glib glob!!!!!");
 $("#michaelBay").click(function(){
   michaelBay = !michaelBay;
 });
@@ -28,10 +26,8 @@ $("#zoomOut").click(function() {
   origin.x += -13;
 });
 $("button").click(function() {
-  console.log("tighhhht");
   draw(pObjA);
 });
-console.log("Viewer still tight bro!!");
 (function()
 {
   var containerW = $("#container").css("width");
