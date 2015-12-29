@@ -1,3 +1,21 @@
+(function()
+{
+  var containerW = $("#container").css("width");
+  var canvasH =$("canvas")[0].height;
+  var canvasW = $("canvas")[0].width;
+  var buttonRightRot = $("#rotateRight").css("width");
+  var buttonLeftRot = $("#rotateLeft").css("width");
+
+  function takeOutLastTwoLetters(word)
+  {
+    var number = "";
+    for(var i = 0; i < word.length-2;i++)
+    {
+      var letter = word[i];
+      number += letter;
+    }
+    return number
+  }
 $("#michaelBay").click(function(){
   michaelBay = !michaelBay;
 });
@@ -28,24 +46,21 @@ $("#zoomOut").click(function() {
 $("button").click(function() {
   draw(pObjA);
 });
-(function()
-{
-  var containerW = $("#container").css("width");
-  var canvasH =$("canvas")[0].height;
-  var canvasW = $("canvas")[0].width;
-  var buttonRightRot = $("#rotateRight").css("width");
-  var buttonLeftRot = $("#rotateLeft").css("width");
+$("#save").click(function() {
+  var castleString = "";
+  buildingMatrix.forEach(function(row,rIndex){
+    row.forEach(function(square,sIndex){
+      castleString += square;
+    });
+  });
+  var username = $("#userName").val();
 
-  function takeOutLastTwoLetters(word)
-  {
-    var number = "";
-    for(var i = 0; i < word.length-2;i++)
-    {
-      var letter = word[i];
-      number += letter;
-    }
-    return number
-  }
+  var data = {username:username,castle:castleString};
+  $.ajax({method:"post",url:"/",data:data});
+  $.ajax({url:"/names",success:function(names){
+    console.log("names is ",names);
+  }});
+});
 
   var containerW = Number(takeOutLastTwoLetters(containerW));
   var rotRightW = Number(takeOutLastTwoLetters(buttonRightRot));
