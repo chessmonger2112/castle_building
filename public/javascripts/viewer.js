@@ -53,25 +53,80 @@ $("#save").click(function() {
       castleString += square;
     });
   });
-  var username = $("#userName").val();
-
-  var data = {username:username,castle:castleString};
+  var data = {username:userName,castle:castleString};
   $.ajax({method:"post",url:"/",data:data});
-  $.ajax({url:"/names",success:function(names){
-    console.log("names is ",names);
-  }});
 });
 
-  var containerW = Number(takeOutLastTwoLetters(containerW));
-  var rotRightW = Number(takeOutLastTwoLetters(buttonRightRot));
-  var rotLeftW = Number(takeOutLastTwoLetters(buttonLeftRot));
-  var containerPos = 40;
-  var center = 645;
-  var spaceAway = 500;
-  $("#container").css("left",containerPos + "px");
-  $("#container").css("top",canvasH - 180);
-  $("#rotateRight").css("left",center + spaceAway + "px");
-  $("#rotateLeft").css("left",center - spaceAway  + "px");
-  $(".rotate").css("top","650px");
+$("#load").click(function() {
+  console.log("Loading time ");
+  $.ajax({
+    url: "/castleInfo",
+    method:"post",
+    data: {userName: userName},
+    success: function(castle){
+      console.log("castle is ",castle);
+      turnStringToArray(castle);
+    }
+  });
+});
+
+
+
+$("#login").click(function(){
+  userName = $("#userName").val();
+  if (userName)
+  {
+    $("#login").css("visibility","hidden");
+    $("#userName").css("visibility","hidden");
+    $("#load").show();
+    $.ajax({
+      url:"/names",
+      data:{userName:userName},
+      method:"post",
+      success:function(names){
+    if(names.length)
+    {
+      console.log("Welcome back ",names[0].userName);
+    }
+    else
+    {
+      console.log("New username added!");
+    }
+  }});
+  }
+});
+
+var containerW = Number(takeOutLastTwoLetters(containerW));
+var rotRightW = Number(takeOutLastTwoLetters(buttonRightRot));
+var rotLeftW = Number(takeOutLastTwoLetters(buttonLeftRot));
+var containerPos = 40;
+var center = 645;
+var spaceAway = 500;
+$("#container").css("left",containerPos + "px");
+$("#container").css("top",canvasH - 180);
+$("#rotateRight").css("left",center + spaceAway + "px");
+$("#rotateLeft").css("left",center - spaceAway  + "px");
+$(".rotate").css("top","650px");
 
 })();
+function turnStringToArray(string)
+{
+  var array = []
+  var temp = []
+
+  for (var n = 0; n < string.length; n ++)
+  {
+    if (n % 3 === 0 && n > 0)
+    {
+      array.push(temp);
+      temp = [];
+    }
+    var char = string[n];
+    temp.push(Number(char));
+  }
+  array.push(temp);
+  console.log("array is ",array);
+  buildingMatrix = array;
+  matrixReader();
+  draw(pObjA);
+}

@@ -2,8 +2,6 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
 
-
-/* GET home page. */
 router.get('/', function(req, res, next) {
   var yolos = new User;
   yolos.favorite = "doing naughty things";
@@ -14,17 +12,39 @@ router.get('/', function(req, res, next) {
 
 router.post('/', function(req, res, next) {
   console.log("Posting time! ",req.body.castle);
-  var sup = new User;
-  sup.userName = req.body.username;
-  sup.castle = req.body.castle;
-  sup.save();
-  res.render('index', { title: 'Express' });
+  var userName = req.body.username;
+  var castle = req.body.castle;
+  User.findOneAndUpdate({userName: userName }, {castle: castle }, function(err, user) {
+  if (err) console.log(err);
+  console.log(user);
+  });
 });
 
-router.get("/names",function(req,res){
-  User.find({},function(err,names){
-    res.send(JSON.stringify(names));
+router.post("/names",function(req,res){
+  var userName = req.body.userName;
+  User.find({userName:userName},function(err,name){
+    console.log("Names is ", name);
+    if (name.length){
+      console.log("Array not empty");
+    }
+    else
+    {
+      console.log("Empty array");
+      var newUser = new User;
+      newUser.userName = userName;
+      newUser.save();
+    }
+    res.json(name);
   });
+});
+
+router.post("/castleInfo",function(req,res){
+  var userName = req.body.userName;
+  console.log("Hit up the castle route ",userName);
+  User.find({userName: userName},function(err,name){
+    console.log("Name is ",name[0].castle);
+    res.json(name[0].castle);
+  })
 });
 
 module.exports = router;

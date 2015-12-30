@@ -6,7 +6,7 @@ canvas{
   height:510px;
 }
 div{
-  z-index: -1
+  z-index: -1;
 }
 #container{
   width: 100%;
@@ -32,14 +32,18 @@ button {
   cursor:e-resize;
 }
 #zoomIn{
-  cursor: zoom-in
+  cursor: zoom-in;
 }
 #zoomOut{
-  cursor: zoom-out
+  cursor: zoom-out;
 }
 .absolute{
   position: absolute;
 }
 #save{
-  background-color:red;
+  background-color: red;
+}
+#load{
+  background-color: green;
+  display: none;
 }
