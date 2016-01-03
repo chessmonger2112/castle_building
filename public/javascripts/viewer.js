@@ -64,9 +64,13 @@ $("#saveCastle").click(function() {
 });
 $("#saveSettings").click(function() {
   var data = {userName:userName,settings: origin, thetaView: thetaView};
-  $("#saveSettings").hide();
+  // $("#saveSettings").hide();
   $.ajax({method:"post",url:"/saveSettings",data:data});
 });
+
+$(".save").click(function(){
+  $(this).hide();
+})
 
 
 $(".load").click(function(){
