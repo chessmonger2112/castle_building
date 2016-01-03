@@ -63,12 +63,21 @@ $("#saveCastle").click(function() {
   $.ajax({method:"post",url:"/",data:data});
 });
 $("#saveSettings").click(function() {
-  var data = {userName:userName,settings: origin};
+  var data = {userName:userName,settings: origin, thetaView: thetaView};
   $("#saveSettings").hide();
-  $.ajax({method:"post",url:"/settings",data:data});
+  $.ajax({method:"post",url:"/saveSettings",data:data});
 });
 
+
+$(".load").click(function(){
+  $(this).hide()
+});
+
+
+
+
 $("#loadCastle").click(function() {
+  // $(this).hide();
   console.log("Loading time ");
   $.ajax({
     url: "/castleInfo",
@@ -82,6 +91,7 @@ $("#loadCastle").click(function() {
 });
 
 $("#loadSettings").click(function(){
+  // $(this).hide();
   $.ajax({url:"/loadSettings",
     method: "post",
     data: {userName,userName},
@@ -90,6 +100,7 @@ $("#loadSettings").click(function(){
       origin.x = Number(sets.x);
       origin.y = Number(sets.y);
       origin.z = Number(sets.z);
+      thetaView = sets.thetaView;
       draw(pObjA);
     }
   });

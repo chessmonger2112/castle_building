@@ -38,16 +38,16 @@ router.post("/names",function(req,res){
   });
 });
 
-router.post("/settings",function(req,res){
-  console.log("req body is ",req.body);
-  console.log("req body settings ",req.body["settings[y]"]);
-  var settings = {x:req.body["settings[x]"], y:req.body["settings[y]"], z:req.body["settings[z]"]};
+router.post("/saveSettings",function(req,res){
+  var settings = {x:req.body["settings[x]"],
+      y:req.body["settings[y]"],
+      z:req.body["settings[z]"],
+      thetaView: req.body.thetaView};
   var userName = req.body.userName;
   User.find({userName: userName}, function(err, data){
     console.log("Data is ",data);
     if (data.length)
     {
-      console.log("This is if statement is waiting for tonight!");
       User.findOneAndUpdate({userName: userName}, {settings: settings}, function(err,data){
         console.log("err is ", err, "data is ", data);
       });

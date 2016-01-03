@@ -127,7 +127,7 @@ function createMatrix()
     var tbody = $('<div>');
     for(var j = 0; j < numCols; j++)
     {
-      var $input = $('<input type="number" data-i=' + i +' data-j=' + j +'> ');
+      var $input = $('<input type="number" class="inputBlocks" data-i=' + i +' data-j=' + j +'> ');
       tbody.append($input);
     }
     $('#wrapper').append(tbody);
@@ -138,6 +138,10 @@ function createMatrix()
 
     var i = $(this).data('i');
     var j = $(this).data('j');
+    if(login === true)
+    {
+      $("#saveCastle").show();
+    }
 
     buildingMatrix[i][j] = parseInt($(this).val());
     matrixReader();
