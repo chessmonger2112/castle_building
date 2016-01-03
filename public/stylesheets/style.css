@@ -5,6 +5,9 @@ canvas{
   text-align: center;
   height:510px;
 }
+body{
+  margin: 0;
+}
 div{
   z-index: -1;
 }
@@ -40,10 +43,11 @@ button {
 .absolute{
   position: absolute;
 }
-#save{
+.save{
   background-color: red;
-}
-#load{
-  background-color: green;
   display: none;
+}
+.load{
+  display: none;
+  background-color: green;
 }

@@ -16,6 +16,12 @@
     }
     return number
   }
+$(".settings").click(function(){
+  if (login)
+  {
+    $("#saveSettings").show();
+  }
+});
 $("#michaelBay").click(function(){
   michaelBay = !michaelBay;
 });
@@ -46,18 +52,23 @@ $("#zoomOut").click(function() {
 $("button").click(function() {
   draw(pObjA);
 });
-$("#save").click(function() {
+$("#saveCastle").click(function() {
   var castleString = "";
   buildingMatrix.forEach(function(row,rIndex){
     row.forEach(function(square,sIndex){
       castleString += square;
     });
   });
-  var data = {username:userName,castle:castleString};
+  var data = {userName:userName,castle:castleString};
   $.ajax({method:"post",url:"/",data:data});
 });
+$("#saveSettings").click(function() {
+  var data = {userName:userName,settings: origin};
+  $("#saveSettings").hide();
+  $.ajax({method:"post",url:"/settings",data:data});
+});
 
-$("#load").click(function() {
+$("#loadCastle").click(function() {
   console.log("Loading time ");
   $.ajax({
     url: "/castleInfo",
@@ -70,15 +81,33 @@ $("#load").click(function() {
   });
 });
 
-
+$("#loadSettings").click(function(){
+  $.ajax({url:"/loadSettings",
+    method: "post",
+    data: {userName,userName},
+    success: function(setting){
+      var sets = setting[0].settings;
+      origin.x = Number(sets.x);
+      origin.y = Number(sets.y);
+      origin.z = Number(sets.z);
+      draw(pObjA);
+    }
+  });
+});
 
 $("#login").click(function(){
   userName = $("#userName").val();
+  login = true;
   if (userName)
   {
     $("#login").css("visibility","hidden");
     $("#userName").css("visibility","hidden");
-    $("#load").show();
+    $("#save").show();
+    if(thetaView !=0 || origin.x != 0 || origin.y != -360 || origin.z != 40)
+    {
+      $("#saveSettings").show();
+    }
+
     $.ajax({
       url:"/names",
       data:{userName:userName},
@@ -87,6 +116,15 @@ $("#login").click(function(){
     if(names.length)
     {
       console.log("Welcome back ",names[0].userName);
+
+      if (names[0].castle)
+      {
+          $("#loadCastle").show();
+      }
+      if (names[0].settings)
+      {
+        $("#loadSettings").show();
+      }
     }
     else
     {
@@ -103,7 +141,7 @@ var containerPos = 40;
 var center = 645;
 var spaceAway = 500;
 $("#container").css("left",containerPos + "px");
-$("#container").css("top",canvasH - 180);
+$("#container").css("top",canvasH - 174);
 $("#rotateRight").css("left",center + spaceAway + "px");
 $("#rotateLeft").css("left",center - spaceAway  + "px");
 $(".rotate").css("top","650px");

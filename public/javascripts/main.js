@@ -1,4 +1,5 @@
 var usedBlocks = 0;
+var login = false;
 var initialBlock = 100;
 var blocksLeft = null;;
 var pObjA = [];

@@ -6,26 +6,28 @@
   <body>
     <div id= "wrapper"></div>
     <canvas id="c" width="800" height="800" style="border:1px solid #000000;"></canvas>
-    <button id="rotateLeft" class="absolute rotate">Rotate Left</button>
+    <button id="rotateLeft" class="absolute rotate settings">Rotate Left</button>
     <span>
       <div id="container" class="absolute">
-        <div><button id="zoomIn">Zoom In</button></div>
-        <div><button id="moveUp">Move screen up</button></div>
+        <div><button id="zoomIn" class="settings">Zoom In</button></div>
+        <div><button id="moveUp" class="settings">Move screen up</button></div>
         <div>
-          <button id="moveLeft">Move screen left</button>
-          <button id="moveRight">Move screen right</button>
+          <button id="moveLeft" class="settings">Move screen left</button>
+          <button id="moveRight" class="settings">Move screen right</button>
         </div>
-        <div><button id="moveDown">Move screen down</button></div>
-        <div><button id="zoomOut">Zoom Out</button></div>
+        <div><button id="moveDown" class="settings">Move screen down</button></div>
+        <div><button id="zoomOut" class="settings">Zoom Out</button></div>
       </div>
     </span>
-    <button id="rotateRight" class="absolute rotate">Rotate right</button>
+    <button id="rotateRight" class="absolute rotate settings">Rotate right</button>
+    <input id="userName" type="text">
+    <button id="login">Login</button>
+    <button id="loadCastle" class="load">Load castle</button>
+    <button id="loadSettings" class="load">Load settings</button>
+    <button id="saveCastle" class="save">Save castle</button>
+    <button id="saveSettings" class="save">Save settings</button>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <script src="javascripts/viewer.js"></script>
   </body>
-  <input id="userName" type="text">
-  <button id="login">Login</button>
-  <button id="load">Load settings/castle</button>
-  <button id="save">Save settings/castle</button>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="javascripts/main.js"></script>
-  <script src="javascripts/viewer.js"></script>
 </html>
